@@ -1,6 +1,6 @@
-# React
+# Fits AI
 
-A modern React-based project utilizing the latest frontend technologies and tools for building responsive web applications.
+A modern React (Vite) SPA with Tailwind, role-based UI, and integrations.
 
 ## 🚀 Features
 
@@ -96,6 +96,26 @@ Build the application for production:
 
 ```bash
 npm run build
+
+### Replit Agent compatibility
+
+This repository includes Replit configuration to improve Agent support:
+
+- `.replit` runs: `npm run start -- --host 0.0.0.0 --port $PORT`
+- `replit.nix` pins Node.js 20 and npm
+
+Steps on Replit:
+
+1. Install dependencies:
+   ```bash
+   npm ci
+   ```
+2. Start dev server (the Agent uses the PORT env):
+   ```bash
+   npm run start -- --host 0.0.0.0 --port $PORT
+   ```
+3. Open the webview on the provided port.
+
 ```
 
 

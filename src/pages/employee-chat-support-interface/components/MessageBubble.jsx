@@ -12,21 +12,21 @@ export default function MessageBubble({ message, onSuggestionClick }) {
   };
 
   const getIconBg = () => {
-    if (isUser) return 'bg-blue-600';
-    if (isSystem) return 'bg-yellow-100';
-    return 'bg-blue-100';
+    if (isUser) return 'bg-primary';
+    if (isSystem) return 'bg-warning/10';
+    return 'bg-primary/10';
   };
 
   const getIconColor = () => {
-    if (isUser) return 'text-white';
-    if (isSystem) return 'text-yellow-600';
-    return 'text-blue-600';
+    if (isUser) return 'text-primary-foreground';
+    if (isSystem) return 'text-warning';
+    return 'text-primary';
   };
 
   const getBubbleStyle = () => {
-    if (isUser) return 'bg-blue-600 text-white';
-    if (isSystem) return 'bg-yellow-50 text-yellow-800 border border-yellow-200';
-    return 'bg-gray-100 text-gray-900';
+    if (isUser) return 'bg-primary text-primary-foreground';
+    if (isSystem) return 'bg-warning/10 text-warning border border-warning/40';
+    return 'bg-muted text-foreground';
   };
 
   const getLabel = () => {
@@ -45,7 +45,7 @@ export default function MessageBubble({ message, onSuggestionClick }) {
             <div className={`w-6 h-6 rounded-full flex items-center justify-center ${getIconBg()}`}>
               <IconComponent className={`w-4 h-4 ${getIconColor()}`} />
             </div>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-text-secondary">
               {getLabel()}
             </span>
           </div>
@@ -61,7 +61,7 @@ export default function MessageBubble({ message, onSuggestionClick }) {
               <button
                 key={index}
                 onClick={() => onSuggestionClick?.(suggestion)}
-                className="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors"
+                className="px-3 py-1 bg-background border border-border rounded-full text-sm text-foreground hover:bg-muted hover:border-border transition-colors"
               >
                 {suggestion}
               </button>
@@ -69,7 +69,7 @@ export default function MessageBubble({ message, onSuggestionClick }) {
           </div>
         )}
         
-        <div className="mt-1 text-xs text-gray-400">
+        <div className="mt-1 text-xs text-muted-foreground">
           {new Date(message?.timestamp)?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>
       </div>

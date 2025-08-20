@@ -68,10 +68,10 @@ const SecurityNotices = () => {
                 <p className="text-sm font-medium text-foreground mb-1">
                   {notice?.title}
                 </p>
-                <p className="text-xs text-muted-foreground mb-2">
+                <p className="text-xs text-text-secondary mb-2">
                   {notice?.message}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-text-secondary">
                   {notice?.timestamp}
                 </p>
               </div>

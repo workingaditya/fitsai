@@ -165,10 +165,10 @@ const AuthenticationSSOLogin = () => {
   const displayError = error || authError;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Main Login Card */}
-        <div className="bg-card border border-border rounded-lg shadow-lg p-8">
+        <div className="bg-card border border-border rounded-xl shadow-md p-8">
           <LoginHeader />
           
           <RoleSelector 

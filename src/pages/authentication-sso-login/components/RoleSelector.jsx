@@ -44,7 +44,7 @@ const RoleSelector = ({ selectedRole, onRoleSelect }) => {
             onClick={() => onRoleSelect(role?.id)}
             className={`p-3 rounded-lg border-2 transition-all duration-200 text-left hover:border-primary/50 ${
               selectedRole === role?.id
-                ? 'border-primary bg-primary/5' :'border-border bg-card hover:bg-muted/50'
+                ? 'border-primary bg-primary/5' :'border-border bg-card hover:bg-muted'
             }`}
           >
             <div className="flex items-center space-x-3">
@@ -53,7 +53,7 @@ const RoleSelector = ({ selectedRole, onRoleSelect }) => {
               </div>
               <div className="flex-1">
                 <p className="font-medium text-sm text-foreground">{role?.name}</p>
-                <p className="text-xs text-muted-foreground">{role?.description}</p>
+                <p className="text-xs text-text-secondary">{role?.description}</p>
               </div>
               {selectedRole === role?.id && (
                 <Icon name="CheckCircle" size={16} className="text-primary" />

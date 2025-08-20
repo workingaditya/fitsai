@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../components/ui/Sidebar';
 import Header from '../../components/ui/Header';
 import Icon from '../../components/AppIcon';
@@ -12,6 +12,7 @@ import ConversationModal from './components/ConversationModal';
 
 const ConversationHistorySearchAnalytics = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeView, setActiveView] = useState('conversations');
   const [selectedConversations, setSelectedConversations] = useState([]);
@@ -138,6 +139,15 @@ const ConversationHistorySearchAnalytics = () => {
     category: 'all',
     llmModel: 'all'
   });
+
+  // Read search query from URL (?q=...)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q');
+    if (q) {
+      setFilters(prev => ({ ...prev, searchQuery: q }));
+    }
+  }, [location.search]);
 
   // Saved filters
   const [savedFilters] = useState([

@@ -29,11 +29,11 @@ const KnowledgeCategoryCard = ({ category, userRole }) => {
       onClick={isAccessible ? handleCategoryClick : undefined}
     >
       <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${category?.bgColor}`}>
+        <div className={`w-12 h-12 rounded-lg flex items-center justify-center bg-primary`}>
           <Icon name={category?.icon} size={24} color="white" />
         </div>
         {category?.isNew && (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground">
             New
           </span>
         )}
@@ -41,11 +41,11 @@ const KnowledgeCategoryCard = ({ category, userRole }) => {
       <h3 className="text-lg font-semibold text-card-foreground mb-2 group-hover:text-primary transition-colors">
         {category?.title}
       </h3>
-      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+      <p className="text-sm text-text-secondary mb-4 line-clamp-2">
         {category?.description}
       </p>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+        <div className="flex items-center space-x-4 text-sm text-text-secondary">
           <div className="flex items-center space-x-1">
             <Icon name="FileText" size={14} />
             <span>{category?.articleCount} articles</span>
@@ -82,10 +82,10 @@ const KnowledgeCategoryCard = ({ category, userRole }) => {
         </div>
       )}
       {!isAccessible && (
-        <div className="absolute inset-0 bg-background/50 rounded-lg flex items-center justify-center">
+        <div className="absolute inset-0 bg-muted/50 rounded-lg flex items-center justify-center">
           <div className="text-center">
-            <Icon name="Lock" size={24} className="text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">Access Restricted</p>
+            <Icon name="Lock" size={24} className="text-text-secondary mx-auto mb-2" />
+            <p className="text-sm text-text-secondary">Access Restricted</p>
           </div>
         </div>
       )}

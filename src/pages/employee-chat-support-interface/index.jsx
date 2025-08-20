@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { sendChatToN8n } from '../../services/n8nService';
@@ -7,6 +7,8 @@ import { appConfig } from '../../config';
 import { ArrowLeft, Send, Paperclip, RotateCcw, Bot, AlertCircle, Mic, MicOff, BookOpen, MessageCircle, HelpCircle, ChevronRight, FileDown, Image, Video } from 'lucide-react';
 
 export default function EmployeeChatSupportInterface() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { user, userProfile } = useAuth();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -38,6 +40,17 @@ export default function EmployeeChatSupportInterface() {
     initializeChat();
     loadRelatedArticles();
   }, [user?.id]);
+
+  // If navigated with a search query from dashboard, auto-send it
+  useEffect(() => {
+    const stateQ = location?.state?.q;
+    if (stateQ) {
+      setTimeout(() => {
+        setInputValue(stateQ);
+        handleSendMessage(stateQ);
+      }, 0);
+    }
+  }, [location?.state]);
 
   useEffect(() => {
     scrollToBottom();
@@ -297,12 +310,19 @@ export default function EmployeeChatSupportInterface() {
         <div className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link 
-                to="/employee-it-support-portal" 
+              <button
+                onClick={() => {
+                  if (window?.history?.length > 1) {
+                    navigate(-1);
+                  } else {
+                    navigate('/employee/it-support');
+                  }
+                }}
                 className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+                title="Back"
               >
                 <ArrowLeft className="w-5 h-5" />
-              </Link>
+              </button>
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
                   <Bot className="w-6 h-6 text-white" />

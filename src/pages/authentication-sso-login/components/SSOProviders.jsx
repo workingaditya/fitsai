@@ -41,14 +41,14 @@ const SSOProviders = ({ onSSOLogin, isLoading }) => {
 
   return (
     <div className="mb-6">
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3">
+      <div className="bg-warning/10 border border-warning rounded-lg p-3 mb-3">
         <div className="flex items-center space-x-2">
-          <Icon name="AlertTriangle" size={16} className="text-yellow-600" />
-          <p className="text-sm text-yellow-800">
+          <Icon name="AlertTriangle" size={16} className="text-warning" />
+          <p className="text-sm text-warning">
             <strong>Demo Mode:</strong> SSO providers require Supabase configuration
           </p>
         </div>
-        <p className="text-xs text-yellow-700 mt-1">
+        <p className="text-xs text-warning mt-1">
           For demo purposes, please use the email/password authentication below
         </p>
       </div>
@@ -71,7 +71,7 @@ const SSOProviders = ({ onSSOLogin, isLoading }) => {
                 <span className="font-medium">{provider?.name}</span>
               </div>
               <div className="flex items-center space-x-1">
-                <span className="text-xs text-muted-foreground">Setup Required</span>
+                <span className="text-xs text-text-secondary">Setup Required</span>
               </div>
             </div>
           </Button>

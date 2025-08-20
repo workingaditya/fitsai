@@ -130,6 +130,13 @@ const ITDashboardKnowledgeOverview = () => {
     navigate('/ai-chat-interface-conversation-management');
   };
 
+  const handleGlobalSearchSubmit = () => {
+    const q = searchQuery?.trim();
+    if (!q) return;
+    // Route to employee chat support and let the bot handle the query
+    navigate('/employee/chat-support', { state: { q } });
+  };
+
   const handleKeyboardShortcut = (e) => {
     if (e?.ctrlKey || e?.metaKey) {
       switch (e?.key) {
@@ -224,12 +231,19 @@ const ITDashboardKnowledgeOverview = () => {
                   placeholder="Search knowledge base, conversations, or ask AI assistant... (Ctrl+K)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e?.target?.value)}
+                  onKeyDown={(e) => { if (e?.key === 'Enter') { e?.preventDefault(); handleGlobalSearchSubmit(); } }}
                   className="pl-10 pr-20"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
                   <kbd className="hidden sm:inline-flex items-center px-2 py-1 text-xs font-medium bg-muted border border-border rounded">
                     ⌘K
                   </kbd>
+                  <button
+                    onClick={handleGlobalSearchSubmit}
+                    className="px-3 py-1 text-xs font-medium bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Search
+                  </button>
                 </div>
               </div>
             </div>

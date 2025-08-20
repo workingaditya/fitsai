@@ -1,0 +1,17 @@
+run = "npm run start -- --host 0.0.0.0 --port $PORT"
+entrypoint = "index.html"
+language = "nodejs"
+
+[env]
+PORT = "3000"
+REPLIT_AGENT = "true"
+
+[packager]
+language = "nodejs"
+
+[packager.features]
+packageSearch = true
+guessImports = false
+
+[hidden]
+paths = ["node_modules", ".git"]

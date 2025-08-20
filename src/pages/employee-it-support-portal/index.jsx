@@ -252,7 +252,7 @@ export default function EmployeeITSupportPortal() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {/* Ask IT Question */}
               <Link 
-                to="/employee-chat-support-interface"
+                to="/employee/chat-support"
                 className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200 group"
               >
                 <div className="flex items-center mb-4">
@@ -270,7 +270,7 @@ export default function EmployeeITSupportPortal() {
               </Link>
 
               {/* Search Knowledge Base */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200 group">
+              <Link to="/employee/chat-support" className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200 group block">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
                     <Search className="w-6 h-6 text-green-600" />
@@ -283,7 +283,7 @@ export default function EmployeeITSupportPortal() {
                 <div className="text-sm text-green-600 font-medium">
                   500+ articles available →
                 </div>
-              </div>
+              </Link>
 
               {/* Submit Help Request */}
               <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200 group">

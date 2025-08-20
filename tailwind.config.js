@@ -15,10 +15,12 @@ export default {
         primary: {
           DEFAULT: 'var(--color-primary)', // emerald-500
           foreground: 'var(--color-primary-foreground)', // white
+          hover: 'var(--color-primary-hover)'
         },
         secondary: {
-          DEFAULT: 'var(--color-secondary)', // gray-500
-          foreground: 'var(--color-secondary-foreground)', // white
+          DEFAULT: 'var(--color-secondary)',
+          foreground: 'var(--color-secondary-foreground)',
+          hover: 'var(--color-secondary-hover)'
         },
         destructive: {
           DEFAULT: 'var(--color-destructive)', // red-600
@@ -61,7 +63,11 @@ export default {
           foreground: 'var(--color-sidebar-foreground)', // gray-50
           muted: 'var(--color-sidebar-muted)', // gray-700
           'muted-foreground': 'var(--color-sidebar-muted-foreground)', // gray-400
+          active: 'var(--color-sidebar-active)'
         },
+        text: {
+          secondary: 'var(--color-text-secondary)'
+        }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

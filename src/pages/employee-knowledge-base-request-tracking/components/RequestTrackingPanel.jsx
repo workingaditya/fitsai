@@ -81,12 +81,12 @@ const RequestTrackingPanel = ({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 bg-white">
+      <div className="p-4 border-b border-border bg-card">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">My Requests</h2>
+          <h2 className="text-lg font-semibold text-foreground">My Requests</h2>
           <button
             onClick={onNewRequest}
-            className="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-sm transition-colors"
+            className="bg-primary text-primary-foreground px-3 py-1.5 rounded-lg hover:bg-primary/90 flex items-center gap-2 text-sm transition-colors"
           >
             <Plus className="w-4 h-4" />
             New
@@ -105,7 +105,7 @@ const RequestTrackingPanel = ({
               onClick={() => setFilter(tab?.id)}
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 filter === tab?.id
-                  ? 'bg-blue-100 text-blue-700' :'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'bg-sidebar-active text-primary' :'text-text-secondary hover:text-foreground hover:bg-muted'
               }`}
             >
               {tab?.label} ({tab?.count})
@@ -117,20 +117,20 @@ const RequestTrackingPanel = ({
       <div className="flex-1 overflow-y-auto">
         {filteredRequests?.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <MessageSquare className="w-8 h-8 text-gray-400" />
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+              <MessageSquare className="w-8 h-8 text-text-secondary" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-foreground mb-2">
               {filter === 'resolved' ? 'No resolved requests' : 'No active requests'}
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-text-secondary mb-4">
               {filter === 'resolved' ?'Completed requests will appear here' :'Submit a request when you need IT help'
               }
             </p>
             {filter !== 'resolved' && (
               <button
                 onClick={onNewRequest}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
               >
                 Submit Your First Request
               </button>
@@ -141,7 +141,7 @@ const RequestTrackingPanel = ({
             {filteredRequests?.map(request => (
               <div
                 key={request?.id}
-                className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow cursor-pointer"
+                className="bg-card border border-border rounded-lg p-4 hover:shadow-sm transition-shadow cursor-pointer"
                 onClick={() => setSelectedRequest(request?.id)}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -151,17 +151,17 @@ const RequestTrackingPanel = ({
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(request?.status)}`}>
                         {request?.status?.replace('-', ' ')?.toUpperCase()}
                       </span>
-                      <span className="text-xs text-gray-500">{request?.category}</span>
+                      <span className="text-xs text-text-secondary">{request?.category}</span>
                     </div>
-                    <h3 className="font-medium text-gray-900 mb-1">{request?.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{request?.description}</p>
+                    <h3 className="font-medium text-foreground mb-1">{request?.title}</h3>
+                    <p className="text-sm text-text-secondary mb-2">{request?.description}</p>
                     
                     {/* Status Message */}
-                    <div className="bg-gray-50 rounded-lg p-3 mb-3">
-                      <p className="text-sm text-gray-700">{getStatusMessage(request)}</p>
+                    <div className="bg-muted rounded-lg p-3 mb-3">
+                      <p className="text-sm text-foreground">{getStatusMessage(request)}</p>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center justify-between text-xs text-text-secondary">
                       <span>Created {getTimeAgo(request?.created)}</span>
                       {request?.messages > 0 && (
                         <div className="flex items-center gap-1">
@@ -173,16 +173,16 @@ const RequestTrackingPanel = ({
 
                     {/* Last Message Preview */}
                     {request?.lastMessage && (
-                      <div className="mt-2 p-2 bg-blue-50 rounded text-sm text-gray-700">
-                        <span className="text-xs text-gray-500">Latest update:</span><br />
+                      <div className="mt-2 p-2 bg-primary/10 rounded text-sm text-foreground">
+                        <span className="text-xs text-text-secondary">Latest update:</span><br />
                         "{request?.lastMessage}"
                       </div>
                     )}
 
                     {/* Rating Section for Resolved Requests */}
                     {request?.status === 'resolved' && !request?.rating && (
-                      <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                        <p className="text-sm font-medium text-green-800 mb-2">How was your experience?</p>
+                      <div className="mt-3 p-3 bg-success/10 border border-success rounded-lg">
+                        <p className="text-sm font-medium text-success mb-2">How was your experience?</p>
                         <div className="flex gap-1">
                           {[1, 2, 3, 4, 5]?.map(rating => (
                             <button
@@ -191,7 +191,7 @@ const RequestTrackingPanel = ({
                                 e?.stopPropagation();
                                 handleRateExperience(request?.id, rating);
                               }}
-                              className="text-gray-400 hover:text-yellow-500 transition-colors"
+                              className="text-muted-foreground hover:text-warning transition-colors"
                             >
                               <Star className="w-4 h-4" />
                             </button>
@@ -202,18 +202,18 @@ const RequestTrackingPanel = ({
 
                     {/* Show Rating if Given */}
                     {request?.rating && (
-                      <div className="mt-2 flex items-center gap-1 text-sm text-gray-600">
+                      <div className="mt-2 flex items-center gap-1 text-sm text-text-secondary">
                         <span>Rated:</span>
                         {[1, 2, 3, 4, 5]?.map(star => (
                           <Star 
                             key={star} 
-                            className={`w-4 h-4 ${star <= request?.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'}`} 
+                            className={`w-4 h-4 ${star <= request?.rating ? 'text-warning fill-current' : 'text-muted-foreground'}`} 
                           />
                         ))}
                       </div>
                     )}
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400 ml-2 flex-shrink-0" />
+                  <ChevronRight className="w-5 h-5 text-muted-foreground ml-2 flex-shrink-0" />
                 </div>
               </div>
             ))}

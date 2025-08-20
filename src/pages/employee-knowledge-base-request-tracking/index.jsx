@@ -147,24 +147,24 @@ const EmployeeKnowledgeBaseRequestTracking = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-transparent">
       {/* Simple Header for Employees */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-card border-b border-border px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">IT Support Portal</h1>
-            <p className="text-gray-600">Get help with your IT needs</p>
+            <h1 className="text-2xl font-bold text-foreground">IT Support Portal</h1>
+            <p className="text-text-secondary">Get help with your IT needs</p>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowNewRequest(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors"
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 flex items-center gap-2 transition-colors"
             >
               <Plus className="w-4 h-4" />
               New Request
             </button>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <div className="w-2 h-2 bg-success rounded-full"></div>
               All systems operational
             </div>
           </div>
@@ -174,7 +174,7 @@ const EmployeeKnowledgeBaseRequestTracking = () => {
       {/* Main Content */}
       <div className="flex h-[calc(100vh-80px)]">
         {/* Knowledge Base Panel (60%) */}
-        <div className="w-3/5 bg-white border-r border-gray-200">
+        <div className="w-3/5 bg-card border-r border-border">
           <KnowledgeBasePanel
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -188,7 +188,7 @@ const EmployeeKnowledgeBaseRequestTracking = () => {
         </div>
 
         {/* Request Tracking Panel (40%) */}
-        <div className="w-2/5 bg-gray-50">
+        <div className="w-2/5 bg-muted">
           <RequestTrackingPanel
             userRequests={userRequests}
             setUserRequests={setUserRequests}

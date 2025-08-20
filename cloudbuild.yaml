@@ -1,0 +1,45 @@
+substitutions:
+  _REGION: us-central1
+  _REPO: fits-ai-repo
+  _IMAGE: fits-ai
+  _VITE_N8N_WEBHOOK_URL: ""
+  _VITE_N8N_AUTH_HEADER: ""
+  _VITE_N8N_API_KEY: ""
+  _VITE_N8N_TIMEOUT_MS: "20000"
+  _VITE_N8N_KB_WEBHOOK_URL: ""
+  _VITE_N8N_TICKET_WEBHOOK_URL: ""
+  _VITE_KB_FEED_URL: ""
+  _VITE_CBO_RSS_FEED_URL: ""
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build image with Dockerfile and VITE_* build args'
+    args:
+      - 'build'
+      - '-f'
+      - 'Dockerfile'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA'
+      - '--build-arg'
+      - 'VITE_N8N_WEBHOOK_URL=${_VITE_N8N_WEBHOOK_URL}'
+      - '--build-arg'
+      - 'VITE_N8N_AUTH_HEADER=${_VITE_N8N_AUTH_HEADER}'
+      - '--build-arg'
+      - 'VITE_N8N_API_KEY=${_VITE_N8N_API_KEY}'
+      - '--build-arg'
+      - 'VITE_N8N_TIMEOUT_MS=${_VITE_N8N_TIMEOUT_MS}'
+      - '--build-arg'
+      - 'VITE_N8N_KB_WEBHOOK_URL=${_VITE_N8N_KB_WEBHOOK_URL}'
+      - '--build-arg'
+      - 'VITE_N8N_TICKET_WEBHOOK_URL=${_VITE_N8N_TICKET_WEBHOOK_URL}'
+      - '--build-arg'
+      - 'VITE_KB_FEED_URL=${_VITE_KB_FEED_URL}'
+      - '--build-arg'
+      - 'VITE_CBO_RSS_FEED_URL=${_VITE_CBO_RSS_FEED_URL}'
+      - '.'
+
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA'

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import Icon from "./AppIcon";
 
 class ErrorBoundary extends React.Component {
@@ -35,15 +36,7 @@ class ErrorBoundary extends React.Component {
               <p className="text-neutral-600 text-base w w-8/12 mx-auto">We encountered an unexpected error while processing your request.</p>
             </div>
             <div className="flex justify-center items-center mt-6">
-              <button
-                onClick={() => {
-                  window.location.href = "/";
-                }}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
-              >
-                <Icon name="ArrowLeft" size={18} color="#fff" />
-                Back
-              </button>
+              <BackButton />
             </div>
           </div >
         </div >
@@ -55,3 +48,18 @@ class ErrorBoundary extends React.Component {
 }
 
 export default ErrorBoundary;
+
+function BackButton() {
+  const navigate = useNavigate();
+  return (
+    <button
+      onClick={() => {
+        if (window?.history?.length > 1) navigate(-1); else navigate('/');
+      }}
+      className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
+    >
+      <Icon name="ArrowLeft" size={18} color="#fff" />
+      Back
+    </button>
+  );
+}
