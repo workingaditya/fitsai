@@ -97,24 +97,41 @@ Build the application for production:
 ```bash
 npm run build
 
-### Replit Agent compatibility
+## 🔧 Replit Compatibility
 
-This repository includes Replit configuration to improve Agent support:
+This project is fully compatible with Replit and Replit Agent:
 
-- `.replit` runs: `npm run start -- --host 0.0.0.0 --port $PORT`
-- `replit.nix` pins Node.js 20 and npm
+### Features
+- **Replit Agent Integrations**: Includes authentication, database, and JavaScript integrations
+- **Auto-Deploy**: Configured for autoscale deployment on Replit
+- **Development Plugins**: Runtime error overlay and cartographer for better debugging
+- **Port Configuration**: Automatically uses PORT environment variable (defaults to 5000)
 
-Steps on Replit:
+### Configuration Files
+- `.replit` - Replit environment configuration with Agent integrations
+- `replit.nix` - Pinned Node.js 20 and npm versions
+- `vite.config.ts` - Replit-optimized Vite configuration with plugins
 
-1. Install dependencies:
+### Running on Replit
+
+1. **Development mode**:
    ```bash
-   npm ci
+   npm run dev
    ```
-2. Start dev server (the Agent uses the PORT env):
+
+2. **Production build**:
    ```bash
-   npm run start -- --host 0.0.0.0 --port $PORT
+   npm run build
+   npm run start
    ```
-3. Open the webview on the provided port.
+
+3. **Quick start** (for Replit Agent):
+   - The project includes pre-configured workflows
+   - Click "Run" button to start development server
+   - Server will be available on the configured port
+
+### Environment Variables
+The project automatically detects Replit environment using `REPL_ID` and loads appropriate plugins for enhanced development experience.
 
 ```
 
