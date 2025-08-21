@@ -204,21 +204,57 @@ app.post('/api/chat/n8n-webhook', async (req, res) => {
     const n8nWebhookUrl = 'https://fitsoman.app.n8n.cloud/webhook/4add9b15-366c-4b8d-af9e-1168410ebde9';
     
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      
       const response = await fetch(n8nWebhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(req.body),
-        timeout: 10000
+        signal: controller.signal
       });
       
+      clearTimeout(timeoutId);
+      console.log(`N8n response status: ${response.status}`);
+      
       if (response.ok) {
-        const data = await response.json();
-        return res.json(data);
+        const text = await response.text();
+        console.log(`N8n response body: ${text}`);
+        
+        if (text && text.trim()) {
+          try {
+            const data = JSON.parse(text);
+            return res.json(data);
+          } catch (parseError) {
+            // If it's not JSON, return the text as content
+            return res.json({
+              reply: text,
+              source: 'n8n_webhook',
+              timestamp: new Date().toISOString()
+            });
+          }
+        } else {
+          console.log('N8n webhook connected successfully but returned empty response - this usually means n8n received the data but is processing it asynchronously');
+          // N8n received the data successfully, provide a confirmation response
+          return res.json({
+            reply: `Thank you for your message! Your request has been successfully sent to our IT support system. Our team has been notified and will process your request.\n\nIn the meantime, here's what you can expect:\n\n• Your ticket has been logged in our system\n• You'll receive updates via email or through the portal\n• For urgent issues, you can also contact our help desk directly\n\nIs there anything else I can help you with right now?`,
+            suggestions: [
+              "What's the status of my ticket?",
+              "I have an urgent IT issue",
+              "How do I contact the help desk?",
+              "I have another question"
+            ],
+            source: 'n8n_webhook_success',
+            timestamp: new Date().toISOString()
+          });
+        }
+      } else {
+        console.log(`N8n error status: ${response.status}`);
       }
     } catch (n8nError) {
-      console.log('N8n webhook unavailable, using fallback response');
+      console.log('N8n webhook error:', n8nError.message);
     }
     
     // Fallback: Generate intelligent response based on message content
