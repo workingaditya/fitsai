@@ -201,7 +201,7 @@ app.post('/api/chat/n8n-webhook', async (req, res) => {
     const { message, user, conversationId, sessionId, source } = req.body;
     
     // Try to forward to actual n8n webhook first
-    const n8nWebhookUrl = 'https://fitsoman.app.n8n.cloud/webhook-test/4add9b15-366c-4b8d-af9e-1168410ebde9';
+    const n8nWebhookUrl = 'https://fitsoman.app.n8n.cloud/webhook/4add9b15-366c-4b8d-af9e-1168410ebde9';
     
     try {
       const response = await fetch(n8nWebhookUrl, {
