@@ -1,37 +1,43 @@
-import { supabase } from '../lib/supabase';
-
 class AuthService {
-  // Sign up new user
+  constructor() {
+    this.apiBaseUrl = '/api';
+    this.token = localStorage.getItem('authToken');
+  }
+
+  // Get auth headers
+  getAuthHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      ...(this.token && { Authorization: `Bearer ${this.token}` })
+    };
+  }
+
+  // Sign up new user (demo implementation)
   async signUp({ email, password, fullName, role = 'viewer' }) {
-    try {
-      const { data, error } = await supabase?.auth?.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            role: role
-          }
-        }
-      });
-      
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      throw new Error(`Sign up failed: ${error?.message}`);
-    }
+    throw new Error('Sign up not available in demo mode. Please use demo credentials.');
   }
 
   // Sign in with email and password
   async signIn({ email, password }) {
     try {
-      const { data, error } = await supabase?.auth?.signInWithPassword({
-        email,
-        password
+      const response = await fetch(`${this.apiBaseUrl}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
       });
+
+      const data = await response.json();
       
-      if (error) throw error;
-      return data;
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // Store token and user data
+      this.token = data.token;
+      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
+      
+      return { user: data.user, session: { access_token: data.token } };
     } catch (error) {
       throw new Error(`Sign in failed: ${error?.message}`);
     }
@@ -40,192 +46,157 @@ class AuthService {
   // Sign out current user
   async signOut() {
     try {
-      const { error } = await supabase?.auth?.signOut();
-      if (error) throw error;
+      await fetch(`${this.apiBaseUrl}/auth/logout`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+
+      // Clear local storage
+      this.token = null;
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      
       return { success: true };
     } catch (error) {
-      throw new Error(`Sign out failed: ${error?.message}`);
+      // Even if server call fails, clear local data
+      this.token = null;
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      return { success: true };
     }
   }
 
   // Get current session
   async getSession() {
     try {
-      const { data: { session }, error } = await supabase?.auth?.getSession();
-      if (error) throw error;
-      return session;
+      if (!this.token) return null;
+      
+      const response = await fetch(`${this.apiBaseUrl}/auth/me`, {
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Token expired, clear it
+          this.token = null;
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('currentUser');
+        }
+        return null;
+      }
+
+      const data = await response.json();
+      return { 
+        access_token: this.token,
+        user: data.user
+      };
     } catch (error) {
-      throw new Error(`Get session failed: ${error?.message}`);
+      console.error('Session check failed:', error);
+      return null;
     }
   }
 
   // Get current user
   async getUser() {
     try {
-      const { data: { user }, error } = await supabase?.auth?.getUser();
-      if (error) throw error;
-      return user;
+      const session = await this.getSession();
+      return session?.user || null;
     } catch (error) {
       throw new Error(`Get user failed: ${error?.message}`);
     }
   }
 
-  // Get user profile from public.profiles table
+  // Get user profile 
   async getUserProfile(userId) {
     try {
-      const { data, error } = await supabase?.from('profiles')?.select(`
-          id,
-          user_id,
-          display_name,
-          role,
-          department,
-          language_preference,
-          created_at,
-          updated_at
-        `)?.eq('user_id', userId)?.single();
-
-      if (error) {
-        // If no profile exists, return null instead of throwing error
-        if (error?.code === 'PGRST116') {
-          return null;
-        }
-        throw error;
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        return {
+          id: user.id,
+          user_id: user.id,
+          display_name: user.name,
+          role: user.role,
+          department: user.role === 'admin' ? 'IT Administration' : 'General',
+          language_preference: 'en'
+        };
       }
-      return data;
+      return null;
     } catch (error) {
       throw new Error(`Get user profile failed: ${error?.message}`);
     }
   }
 
-  // Create or update user profile
+  // Create or update user profile (demo)
   async upsertUserProfile(profileData) {
-    try {
-      const { data, error } = await supabase?.from('profiles')?.upsert(profileData, {
-          onConflict: 'user_id',
-          ignoreDuplicates: false
-        })?.select()?.single();
-
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      throw new Error(`Upsert user profile failed: ${error?.message}`);
-    }
+    // In demo mode, just return the profile data
+    return profileData;
   }
 
-  // Update user profile
+  // Update user profile (demo)
   async updateUserProfile(userId, updateData) {
-    try {
-      const { data, error } = await supabase?.from('profiles')?.update(updateData)?.eq('user_id', userId)?.select()?.single();
-
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      throw new Error(`Update user profile failed: ${error?.message}`);
-    }
+    // In demo mode, just return the updated data
+    return { ...updateData, user_id: userId };
   }
 
-  // Reset password
+  // Reset password (demo)
   async resetPassword(email) {
-    try {
-      const { error } = await supabase?.auth?.resetPasswordForEmail(email, {
-        redirectTo: `${window?.location?.origin}/reset-password`
-      });
-      
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      throw new Error(`Reset password failed: ${error?.message}`);
-    }
+    throw new Error('Password reset not available in demo mode');
   }
 
-  // Update password
+  // Update password (demo)
   async updatePassword(newPassword) {
-    try {
-      const { error } = await supabase?.auth?.updateUser({
-        password: newPassword
-      });
-      
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      throw new Error(`Update password failed: ${error?.message}`);
-    }
+    throw new Error('Password update not available in demo mode');
   }
 
-  // SSO Login with OAuth providers
+  // SSO Login (demo)
   async signInWithOAuth(provider) {
-    try {
-      const { data, error } = await supabase?.auth?.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window?.location?.origin}/dashboard`
-        }
-      });
-      
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      throw new Error(`OAuth sign in failed: ${error?.message}`);
-    }
+    throw new Error('OAuth not available in demo mode');
   }
 
   // Check if user has specific role
   async hasRole(userId, requiredRole) {
-    try {
-      const { data, error } = await supabase?.from('user_roles')?.select('role')?.eq('user_id', userId)?.eq('role', requiredRole)?.single();
-
-      if (error && error?.code !== 'PGRST116') {
-        throw error;
-      }
-      
-      return !!data;
-    } catch (error) {
-      throw new Error(`Check role failed: ${error?.message}`);
-    }
+    const user = await this.getUser();
+    return user?.role === requiredRole;
   }
 
   // Get user roles
   async getUserRoles(userId) {
-    try {
-      const { data, error } = await supabase?.from('user_roles')?.select('role')?.eq('user_id', userId);
-
-      if (error) throw error;
-      return data?.map(row => row?.role) || [];
-    } catch (error) {
-      throw new Error(`Get user roles failed: ${error?.message}`);
-    }
+    const user = await this.getUser();
+    return user?.role ? [user.role] : [];
   }
 
-  // Add role to user
+  // Add role to user (demo)
   async addUserRole(userId, role) {
-    try {
-      const { data, error } = await supabase?.from('user_roles')?.insert({
-          user_id: userId,
-          role
-        })?.select()?.single();
-
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      throw new Error(`Add user role failed: ${error?.message}`);
-    }
+    throw new Error('Role management not available in demo mode');
   }
 
-  // Remove role from user
+  // Remove role from user (demo)
   async removeUserRole(userId, role) {
-    try {
-      const { error } = await supabase?.from('user_roles')?.delete()?.eq('user_id', userId)?.eq('role', role);
-
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      throw new Error(`Remove user role failed: ${error?.message}`);
-    }
+    throw new Error('Role management not available in demo mode');
   }
 
   // Listen to auth state changes
   onAuthStateChange(callback) {
-    return supabase?.auth?.onAuthStateChange(callback);
+    // Simple implementation for demo
+    const checkAuth = () => {
+      const token = localStorage.getItem('authToken');
+      const user = localStorage.getItem('currentUser');
+      if (token && user) {
+        callback({ 
+          event: 'SIGNED_IN', 
+          session: { access_token: token, user: JSON.parse(user) } 
+        });
+      } else {
+        callback({ event: 'SIGNED_OUT', session: null });
+      }
+    };
+
+    // Check immediately
+    checkAuth();
+
+    // Return cleanup function
+    return { unsubscribe: () => {} };
   }
 }
 

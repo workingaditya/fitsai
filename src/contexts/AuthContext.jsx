@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
 import { authService } from '../services/authService';
 
 const AuthContext = createContext({})
@@ -19,11 +18,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   
-  // Demo auth mode: bypass Supabase for local testing and demos
-  const isDemoAuth =
-    import.meta?.env?.VITE_DEMO_AUTH === 'true' ||
-    (import.meta?.env?.VITE_SUPABASE_URL?.includes?.('example.supabase.co') &&
-     import.meta?.env?.VITE_SUPABASE_ANON_KEY === 'public-anon-key')
+  // Always use demo auth mode (no Supabase integration)
+  const isDemoAuth = true
 
   const persistDemoState = (state) => {
     try { localStorage?.setItem('demo_auth_state', JSON.stringify(state)) } catch {}
@@ -47,29 +43,8 @@ export const AuthProvider = ({ children }) => {
       return
     }
 
-    // Get initial session - Use Promise chain
-    supabase?.auth?.getSession()?.then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser(session?.user)
-        fetchUserProfile(session?.user?.id)
-      }
-      setLoading(false)
-    })
-
-    // Listen for auth changes - NEVER ASYNC callback
-    const listener = supabase?.auth?.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        setUser(session?.user)
-        fetchUserProfile(session?.user?.id)  // Fire-and-forget, NO AWAIT
-      } else {
-        setUser(null)
-        setUserProfile(null)
-        setUserRoles([])
-      }
-      setLoading(false)
-    })
-
-    return () => listener?.data?.subscription?.unsubscribe?.()
+    // Non-demo mode removed - using demo only now
+    setLoading(false)
   }, [])
 
   const fetchUserProfile = async (userId) => {

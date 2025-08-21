@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { supabase } from '../../lib/supabase';
 import { sendChatToN8n } from '../../services/n8nService';
 import { appConfig } from '../../config';
 import { ArrowLeft, Send, Paperclip, RotateCcw, Bot, AlertCircle, Mic, MicOff, BookOpen, MessageCircle, HelpCircle, ChevronRight, FileDown, Image, Video } from 'lucide-react';

@@ -1,15 +1,15 @@
 # syntax=docker/dockerfile:1.6
 
-# ---- Build stage ----
-FROM node:20-alpine AS builder
+# ---- Production stage ----
+FROM node:20-alpine AS production
 WORKDIR /app
 
-# Install deps first (cache-friendly)
+# Install production dependencies only
 COPY package.json package-lock.json* ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci || npm i
+    npm ci --only=production || npm i --only=production
 
-# Copy the rest of the app
+# Copy the entire application
 COPY . .
 
 # Build-time environment variables for Vite (optional)
@@ -32,16 +32,25 @@ ENV VITE_N8N_WEBHOOK_URL=$VITE_N8N_WEBHOOK_URL \
     VITE_KB_FEED_URL=$VITE_KB_FEED_URL \
     VITE_CBO_RSS_FEED_URL=$VITE_CBO_RSS_FEED_URL
 
+# Install dev dependencies temporarily for build
+RUN npm ci || npm i
+
+# Build the frontend
 RUN npm run build
 
-# ---- Runtime stage (non-root, listens on 8080) ----
-FROM nginxinc/nginx-unprivileged:stable-alpine
-# Copy SPA nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-# Copy built assets
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Remove dev dependencies after build
+RUN npm prune --production
 
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+
+# Change ownership of the app directory
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Expose port 8080 (Replit deployment port)
 EXPOSE 8080
-# nginx-unprivileged uses UID 101 and listens on 8080 by default
-USER 101
+
+# Start the Express server
+CMD ["node", "server/simple-server.js"]
 
