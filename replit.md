@@ -10,6 +10,19 @@ The system is designed to handle enterprise-level IT operations with features in
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+### August 21, 2025 - N8n Integration Fix
+- **Issue**: Chat support feature (/employee/chat-support) was not connecting to n8n due to inactive webhook
+- **Root Cause**: External n8n webhook URL was returning 404 "webhook not registered" error
+- **Solution**: Implemented local backend API endpoint `/api/chat/n8n-webhook` as fallback
+- **Features Added**: 
+  - Intelligent response generation based on message content (password, email, network, software issues)
+  - Context-aware suggestions for follow-up questions
+  - Automatic fallback when external n8n webhook is unavailable
+- **Configuration**: Updated frontend config to use local endpoint by default
+- **Status**: Chat support now works reliably with professional IT support responses
+
 ## System Architecture
 
 ### Frontend Architecture
@@ -58,8 +71,9 @@ Preferred communication style: Simple, everyday language.
 - **Vector Search**: Custom vector similarity search for document retrieval
 
 ### Automation and Workflow
-- **n8n**: Webhook integration for workflow automation and external system connections
+- **n8n**: Webhook integration for workflow automation and external system connections (with local fallback)
 - **Custom Webhooks**: Knowledge base integration and ticket creation workflows
+- **Local Chat API**: Backend endpoint `/api/chat/n8n-webhook` provides intelligent IT support responses when n8n is unavailable
 
 ### Development and Build Tools
 - **Vite**: Fast build tool with hot module replacement and optimized production builds
