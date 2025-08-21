@@ -7,11 +7,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || (process.env.NODE_ENV === 'production' ? 8080 : 5000);
 
 // CORS configuration
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5000'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.REPLIT_DEV_DOMAIN, 'https://*.replit.app', 'https://*.replit.co']
+    : ['http://localhost:5173', 'http://localhost:5000'],
   credentials: true,
 }));
 
