@@ -4,7 +4,7 @@
 export const appConfig = {
   n8nWebhookUrl:
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_N8N_WEBHOOK_URL) ||
-    'https://fitsoman.app.n8n.cloud/webhook/4add9b15-366c-4b8d-af9e-1168410ebde9',
+    '/api/chat/n8n-webhook',
   n8nAuthHeader:
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_N8N_AUTH_HEADER) ||
     null,
