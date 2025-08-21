@@ -5,13 +5,12 @@ echo "🚀 Starting FITS AI in production mode..."
 
 # Set production environment
 export NODE_ENV=production
+export PORT=8080
 
-# Ensure build directory exists
-if [ ! -d "build" ]; then
-    echo "📦 Building application..."
-    npm run build
-fi
+# Build the application
+echo "📦 Building application..."
+npm run build
 
 # Start the server
-echo "🌐 Starting Express server..."
+echo "🌐 Starting Express server on port $PORT..."
 node server/simple-server.js
