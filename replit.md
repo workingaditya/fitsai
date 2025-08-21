@@ -13,15 +13,17 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 ### August 21, 2025 - N8n Integration Fix
-- **Issue**: Chat support feature (/employee/chat-support) was not connecting to n8n due to inactive webhook
-- **Root Cause**: External n8n webhook URL was returning 404 "webhook not registered" error
-- **Solution**: Implemented local backend API endpoint `/api/chat/n8n-webhook` as fallback
+- **Issue**: Chat support feature (/employee/chat-support) was not connecting to n8n due to incorrect webhook URL
+- **Root Cause**: Using test webhook URL instead of production webhook URL
+- **Solution**: Updated to correct production n8n webhook URL: `https://fitsoman.app.n8n.cloud/webhook/4add9b15-366c-4b8d-af9e-1168410ebde9`
+- **Backup Solution**: Implemented local backend API endpoint `/api/chat/n8n-webhook` with intelligent fallback responses
 - **Features Added**: 
-  - Intelligent response generation based on message content (password, email, network, software issues)
+  - Direct connection to production n8n workflow
+  - Intelligent fallback response generation based on message content (password, email, network, software issues)
   - Context-aware suggestions for follow-up questions
-  - Automatic fallback when external n8n webhook is unavailable
-- **Configuration**: Updated frontend config to use local endpoint by default
-- **Status**: Chat support now works reliably with professional IT support responses
+  - Automatic fallback when external n8n webhook is temporarily unavailable
+- **Configuration**: Updated both frontend config and backend proxy to use correct production URL
+- **Status**: Chat support now connects directly to n8n with intelligent fallback system
 
 ## System Architecture
 
