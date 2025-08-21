@@ -56,7 +56,7 @@ const LocalAuthForm = ({ onLocalLogin, isLoading, error }) => {
             size="sm"
             onClick={() => handleDemoLogin('admin')}
             disabled={isLoading}
-            className="text-xs"
+            className="text-xs hover:bg-blue-100 hover:border-blue-300 hover:text-blue-800 transition-colors duration-200"
           >
             Admin
           </Button>
@@ -65,7 +65,7 @@ const LocalAuthForm = ({ onLocalLogin, isLoading, error }) => {
             size="sm"
             onClick={() => handleDemoLogin('employee')}
             disabled={isLoading}
-            className="text-xs"
+            className="text-xs hover:bg-green-100 hover:border-green-300 hover:text-green-800 transition-colors duration-200"
           >
             Employee
           </Button>
@@ -74,7 +74,7 @@ const LocalAuthForm = ({ onLocalLogin, isLoading, error }) => {
             size="sm"
             onClick={() => handleDemoLogin('support')}
             disabled={isLoading}
-            className="text-xs"
+            className="text-xs hover:bg-purple-100 hover:border-purple-300 hover:text-purple-800 transition-colors duration-200"
           >
             Support
           </Button>
